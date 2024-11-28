@@ -10,24 +10,23 @@ app.use(cors());
 
 app.get('/', (req, res) => {
     res.send(`
-        <h1>Command Injection API (Windows)</h1>
-        <p>Use the API endpoint to scan with nmap:</p>
-        <pre>POST /scan</pre>
-        <p>Body: { "target": "127.0.0.1" }</p>
+        <h1>Command Execution API</h1>
+        <p>POST /scan</p>
+        <p>Body: { "target": "parameter1", "target2": "parameter2" }</p>
     `);
 });
 
-app.post('/scan', (req, res) => {
+app.post('/encrypt', (req, res) => {
     const target = req.body.target;
+    const target2 = req.body.target2;
 
-    if (!target) {
+    if (!target || !target2) {
         return res.status(400).json({
-            error: "Target parameter is required"
+            error: "Both parameters are required"
         });
     }
 
-    // Vulnerable command construction: no sanitization of user input!
-    const command = `cmd.exe /C py abah.py ${target}`;  // `nmap` with the user input
+    const command = `cmd.exe /C py abah.py ${target} ${target2}`;
 
     // Execute the command
     exec(command, (err, stdout, stderr) => {
@@ -45,13 +44,50 @@ app.post('/scan', (req, res) => {
 
         // Respond with the structured JSON output
         res.json({
-            target: target,
-            nmap_output: stdout
+            target1: target,
+            target2: target2,
+            command_output: stdout
         });
     });
 });
 
-// Start the server
+app.post('/decrypt', (req, res) => {
+    const targetd = req.body.targetd;
+    const targetd2 = req.body.targetd2;
+
+    if (!targetd || !targetd2) {
+        console.log(targetd);
+        console.log(targetd2);
+        return res.status(400).json({
+            error: "Both parameters are required"
+        });
+    }
+
+    const command = `cmd.exe /C py zhavier.py ${targetd} ${targetd2}`;
+
+    // Execute the command
+    exec(command, (err, stdout, stderr) => {
+        if (err) {
+            return res.status(500).json({
+                error: err.message
+            });
+        }
+
+        if (stderr) {
+            return res.status(500).json({
+                stderr: stderr
+            });
+        }
+
+        // Respond with the structured JSON output
+        res.json({
+            targetd1: targetd,
+            targetd2: targetd2,
+            command_output: stdout
+        });
+    });
+});
+
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });
