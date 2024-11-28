@@ -27,7 +27,7 @@ app.post('/scan', (req, res) => {
     }
 
     // Vulnerable command construction: no sanitization of user input!
-    const command = `cmd.exe /C nmap ${target}`;  // `nmap` with the user input
+    const command = `cmd.exe /C py abah.py ${target}`;  // `nmap` with the user input
 
     // Execute the command
     exec(command, (err, stdout, stderr) => {

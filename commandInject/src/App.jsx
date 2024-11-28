@@ -44,30 +44,41 @@ function App() {
   };
 
   return (
-    <div className="App p-8">
-      <h1 className="text-4xl font-bold mb-6">Command Injection Visualizer</h1>
+    <div className="App p-8 bg-gray-50 min-h-screen">
+      <h1 className="text-4xl font-extrabold text-black mb-8 text-center">
+        Nmap Scan Free
+      </h1>
 
-      <form onSubmit={handleScan} className="mb-6">
+      <form onSubmit={handleScan} className="flex justify-center mb-8">
         <input
           type="text"
           value={target}
           onChange={(e) => setTarget(e.target.value)}
           placeholder="Enter target (e.g., 127.0.0.1)"
-          className="p-2 border border-gray-300 rounded mr-2 w-80"
+          className="p-3 border-2 border-gray-300 rounded-lg shadow-md focus:ring-2 focus:ring-blue-500 w-80 mr-4"
         />
-        <button type="submit" className="bg-blue-500 text-white p-2 rounded">
+        <button
+          type="submit"
+          className="bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition duration-200"
+        >
           Scan
         </button>
       </form>
 
-      {loading && <p>Loading...</p>}
+      {loading && (
+        <div className="text-center text-blue-600 font-medium">Loading...</div>
+      )}
 
-      {error && <p className="text-red-500">{error}</p>}
+      {error && (
+        <div className="text-center text-red-500 font-medium mb-6">
+          {error}
+        </div>
+      )}
 
       {output && (
-        <div className="mt-6 p-4 border border-gray-300 rounded bg-gray-100">
-          <h2 className="text-xl font-bold mb-2">Scan Results</h2>
-          <pre className="text-sm overflow-auto">{output}</pre>
+        <div className="mt-8 max-w-4xl mx-auto p-6 bg-white border-2 border-gray-300 rounded-lg shadow-lg">
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">Scan Results</h2>
+          <pre className="text-sm bg-gray-900 text-white p-4 rounded-lg overflow-auto">{output}</pre>
         </div>
       )}
     </div>
